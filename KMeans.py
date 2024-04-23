@@ -69,7 +69,7 @@ def computeClusterRepresentatives(dataset, cluster_ids, k):
     """
     return np.array([dataset[cluster_ids == i].mean(axis=0) for i in range(k)])
 
-def KMeans(dataset, maxIter=100):
+def KMeans(dataset, maxIter=100, max_k=9):
     """Run the K-means algorithm, compute silhouette scores, and plot them.
 
     Args:
@@ -77,7 +77,7 @@ def KMeans(dataset, maxIter=100):
         maxIter (int): Maximum number of iterations for convergence.
     """
     silhouette_scores = [0]  # Silhouette score for k=1 is not defined
-    for k in range(2, 10):
+    for k in range(2, max_k+1):
         centers = initialSelection(dataset, k)
         for _ in range(maxIter):
             cluster_ids = assignClusterIds(dataset, centers)
