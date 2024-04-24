@@ -1,13 +1,18 @@
-#  Implement k-means++ clustering algorithm and cluster the dataset provided using it. Vary the value
-# of k from 1 to 9 and compute the Silhouette coefficient for each set of clusters. Plot k in the horizontal
-# axis and the Silhouette coefficient in the vertical axis in the same plot
-
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 def load_data(fname):
-    """Load data from a file into a NumPy array."""
+    """
+    Load data from a file into a NumPy array.
+
+    Args:
+        fname (str): Filename of the data file.
+
+    Returns:
+        np.array: Array of data points where each row represents a data point.
+
+    """
     features = []
     with open(fname) as F:
         for line in F:
@@ -16,11 +21,31 @@ def load_data(fname):
     return np.array(features)
 
 def ComputeDistance(x, y):
-    """Calculate the Euclidean distance between two points."""
+    """
+    Calculate the Euclidean distance between two points.
+
+    Args:
+        x (np.array): First point.
+        y (np.array): Second point.
+
+    Returns:
+        float: Euclidean distance between x and y.
+
+    """
     return np.linalg.norm(x - y)
 
 def initialSelection(dataset, k):
-    """Select initial centroids using the K-means++ algorithm."""
+    """
+    Select initial centroids randomly from the dataset.
+
+    Args:
+        dataset (np.array): The dataset from which centroids are to be selected.
+        k (int): Number of clusters.
+
+    Returns:
+        np.array: Initial centroids selected randomly from the dataset.
+
+    """
     np.random.seed(42)  # Ensure reproducibility
     initial_index = np.random.choice(len(dataset))
     centroids = [dataset[initial_index]]
@@ -34,16 +59,44 @@ def initialSelection(dataset, k):
     return np.array(centroids)
 
 def assignClusterIds(dataset, centers):
-    """Assign each data point to the nearest cluster by centroid."""
+    """
+    Assign each data point to the nearest cluster by centroid.
+    
+    Args:
+        dataset (np.array): The dataset.
+        centers (np.array): Current centroids.
+        
+    Returns:
+        np.array: Cluster IDs for each data point.
+    """
     cluster_ids = [np.argmin([ComputeDistance(point, center) for center in centers]) for point in dataset]
     return np.array(cluster_ids)
 
 def computeClusterRepresentatives(dataset, cluster_ids, k):
-    """Compute new centroids as the mean of the data points in each cluster."""
+    """
+    Compute new centroids as the mean of the data points in each cluster.
+
+    Args:
+        dataset (np.array): The dataset.
+        cluster_ids (np.array): Array of cluster IDs for each data point.
+        k (int): Number of clusters.
+
+    Returns:
+        np.array: Array of new centroids.
+
+    """
     return np.array([dataset[cluster_ids == i].mean(axis=0) for i in range(k)])
 
 def KMeansplusplus(dataset, maxIter=100, max_k=9):
-    """Run the K-means algorithm, compute silhouette scores, and plot them."""
+    """
+    Perform KMeans clustering with KMeans++ initialization.
+
+    Args:
+        dataset (np.array): The dataset on which k-means is to be run.
+        maxIter (int): Maximum number of iterations for convergence.
+        max_k (int): Maximum number of clusters to consider.
+
+    """
     silhouette_scores = [0]  # Silhouette score for k=1 is not defined
     for k in range(2, max_k+1):
         centers = initialSelection(dataset, k)
@@ -59,7 +112,16 @@ def KMeansplusplus(dataset, maxIter=100, max_k=9):
     plot_silhouette(silhouette_scores)
 
 def distanceMatrix(dataset):
-    """Create a matrix of all pairwise distances between data points in the dataset."""
+    """
+    Create a matrix of all pairwise distances between data points in the dataset.
+
+    Args:
+        dataset (np.array): Dataset of data points.
+
+    Returns:
+        np.array: Matrix of distances.
+
+    """
     N = len(dataset)
     distMatrix = np.zeros((N, N))
     for i in range(N):
@@ -68,7 +130,20 @@ def distanceMatrix(dataset):
     return distMatrix
 
 def silhouette(dataset, clusters, cluster_ids, distMatrix):
-    """Calculate the silhouette score for the clustering."""
+    """
+    Calculate the silhouette score for the clustering.
+
+    Args:
+        dataset (np.array): The dataset.
+        clusters (list): List of clusters where each cluster is a list of data points.
+        cluster_ids (np.array): Array of cluster IDs for each data point.
+        distMatrix (np.array): Matrix of pairwise distances between data points.
+
+    Returns:
+        float: Silhouette score for the clustering.
+
+    """
+
     silhouette_values = []
     for i in range(len(dataset)):
         a = np.mean([distMatrix[i][j] for j in clusters[cluster_ids[i]] if i != j])
@@ -77,7 +152,13 @@ def silhouette(dataset, clusters, cluster_ids, distMatrix):
     return np.mean(silhouette_values)
 
 def plot_silhouette(silhouette_scores):
-    """Plot silhouette scores against the number of clusters."""
+    """
+    Plot silhouette scores against the number of clusters.
+
+    Args:
+        silhouette_scores (list): List of silhouette scores for each number of clusters.
+
+    """
     plt.figure(figsize=(10, 6))
     plt.plot(range(1, 10), silhouette_scores, marker='o')
     plt.title('Silhouette Coefficient for Various Numbers of Clusters')
