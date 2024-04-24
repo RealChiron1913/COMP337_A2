@@ -39,7 +39,7 @@ def initialSelection(dataset, k):
     Returns:
         np.array: Initial centroids selected randomly from the dataset.
     """
-    np.random.seed(22)  # Ensure reproducibility
+    np.random.seed(42)  # Ensure reproducibility
     indices = np.random.choice(dataset.shape[0], k, replace=False)
     return dataset[indices]
 
@@ -68,6 +68,7 @@ def computeClusterRepresentatives(dataset, cluster_ids, k):
         np.array: Array of new centroids.
     """
     return np.array([dataset[cluster_ids == i].mean(axis=0) for i in range(k)])
+
 
 def KMeans(dataset, maxIter=100, max_k=9):
     """Run the K-means algorithm, compute silhouette scores, and plot them.

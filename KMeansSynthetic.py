@@ -13,7 +13,7 @@ def generateSyntheticData(dataset):
     Returns:
         np.array: Synthetic data of the same size as the dataset.
     """
-    np.random.seed(22)
+    np.random.seed(42)
     return np.random.rand(*get_shape(dataset))
 
 def get_shape(filename):
@@ -56,7 +56,7 @@ def initialSelection(dataset, k):
     Returns:
         np.array: Initial centroids selected randomly from the dataset.
     """
-    np.random.seed(22)  # Ensure reproducibility
+    np.random.seed(42)  # Ensure reproducibility
     indices = np.random.choice(dataset.shape[0], k, replace=False)
     return dataset[indices]
 
@@ -110,7 +110,7 @@ def silhouette(dataset, cluster_ids, k):
             silhouette_values.append((b - a) / max(a, b))
     return np.mean(silhouette_values)
 
-def KMeans(dataset, maxIter=100, max_k=9):
+def KMeansSynthetic(dataset, maxIter=100, max_k=9):
     """Run the K-means algorithm, compute silhouette scores, and plot them.
 
     Args:
@@ -164,4 +164,4 @@ def distanceMatrix(dataset):
 if __name__ == '__main__':
     dataset = 'dataset'
     synthetic_data = generateSyntheticData(dataset)
-    KMeans(synthetic_data)
+    KMeansSynthetic(synthetic_data)
