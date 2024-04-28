@@ -142,7 +142,7 @@ def plot_silhouette(silhouette_scores):
     plt.xlabel('Number of clusters (k)')
     plt.ylabel('Silhouette coefficient')
     plt.title('Silhouette coefficient vs. Number of clusters')
-    plt.show()
+    plt.savefig('KMeansSynthetic.png')
 
 def distanceMatrix(dataset):
     """Create a matrix of all pairwise distances between data points in the dataset.

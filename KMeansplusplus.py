@@ -165,7 +165,7 @@ def plot_silhouette(silhouette_scores):
     plt.xlabel('Number of Clusters (k)')
     plt.ylabel('Silhouette Coefficient')
     plt.grid(True)
-    plt.show()
+    plt.savefig('KMeansplusplus.png')
 
 if __name__ == '__main__':
     dataset = load_data('dataset')

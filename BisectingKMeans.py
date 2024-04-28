@@ -177,7 +177,8 @@ def plot_silhouette(silhouette_scores):
     plt.xlabel('Number of clusters')
     plt.ylabel('Silhouette score')
     plt.grid(True)
-    plt.show()
+    # save the plot
+    plt.savefig('BisectingKMeans.png')
 
 if __name__ == '__main__':
     dataset = load_data('dataset')
